@@ -1,15 +1,13 @@
-
-
-import './App.css'
+import './App.css';
+import { RouterProvider } from 'react-router-dom';
+import { route } from './routes/route';
 
 function App() {
-  const environment = import.meta.env.VITE_ENVIRONMENT;
-
   return (
     <>
-      <h1>{environment}</h1>
+      <RouterProvider router={route} />
     </>
   );
 }
 
-export default App
+export default App;
