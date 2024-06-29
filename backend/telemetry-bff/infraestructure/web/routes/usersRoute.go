@@ -1,0 +1,11 @@
+package routes
+
+import (
+	"github.com/LuisDiazM/backend/telemetry-bff/app"
+	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/web/controllers"
+	"github.com/gin-gonic/gin"
+)
+
+func RegisterUsersRouter(group *gin.RouterGroup, app *app.Application) {
+	group.GET("/user/me", controllers.CheckUserController(app))
+}
