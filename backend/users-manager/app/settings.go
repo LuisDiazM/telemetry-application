@@ -9,6 +9,7 @@ import (
 
 type AppSettings struct {
 	Mongo *mongo.MongoSettings
+	Port  string `envconfig:"PORT" default:"50051"`
 }
 
 func GetAppSettings() *AppSettings {
