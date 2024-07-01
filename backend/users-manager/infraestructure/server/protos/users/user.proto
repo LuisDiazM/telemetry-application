@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package server.controllers;
+
+option go_package = "github.com/LuisDiazM/backend/users-manager/infraestructure/server/protos/users";
+
+service UsersService {
+  rpc SayHello (PingRequest) returns (PingReply) {}
+}
+
+message PingRequest {
+  string name = 1;
+}
+
+message PingReply {
+  string message = 1;
+}
+
