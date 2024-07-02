@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"context"
-	"log"
+	"fmt"
 
 	pb "github.com/LuisDiazM/backend/users-manager/infraestructure/server/protos/users"
 )
@@ -18,7 +18,6 @@ func NewUsersController() *UsersController {
 	}
 }
 
-func (s *UsersController) SayHello(context.Context, *pb.PingRequest) (*pb.PingReply, error) {
-	log.Println(s.Name)
-	return &pb.PingReply{Message: "hey there!!"}, nil
+func (s *UsersController) SayHello(ctx context.Context, in *pb.PingRequest) (*pb.PingReply, error) {
+	return &pb.PingReply{Message: fmt.Sprintf(`Hey %s!!!`, in.Name)}, nil
 }
