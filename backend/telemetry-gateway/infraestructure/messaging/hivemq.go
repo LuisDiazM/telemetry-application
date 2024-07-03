@@ -35,8 +35,7 @@ func (hive *MessagingBroker) Subscribe(topic string, callback mqtt.MessageHandle
 	token.Wait()
 	// Check for errors during subscribe
 	if token.Error() != nil {
-		fmt.Printf("Failed to subscribe to topic")
-		panic(token.Error())
+		log.Error().Msg(fmt.Sprintf(`failed to subscribe topic %s %s`, topic, token.Error().Error()))
 	}
 	log.Info().Msg(fmt.Sprintf(`"Subscribed to topic: %s"`, topic))
 }

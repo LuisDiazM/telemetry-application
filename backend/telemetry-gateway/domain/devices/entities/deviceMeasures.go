@@ -4,7 +4,7 @@ import "time"
 
 type Location struct {
 	TypeL       string    `json:"type,omitempty" bson:"type"`
-	Coordinates []float32 `json:"coordinates,omitempty" bson:"coordinates"`
+	Coordinates []float64 `json:"coordinates,omitempty" bson:"coordinates"`
 }
 
 type MetaInfo struct {

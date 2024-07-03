@@ -8,5 +8,5 @@ import (
 
 type IDbRepository interface {
 	GetDeviceData(ctx context.Context, sensorId string) *entities.MetaInfo
-	SaveDeviceMeasureData(ctx context.Context, input entities.DeviceMeasures) int
+	SaveDeviceMeasureData(ctx context.Context, input entities.DeviceMeasures) string
 }
