@@ -1,0 +1,37 @@
+syntax="proto3";
+
+package sensor;
+import "google/protobuf/timestamp.proto";
+
+
+message MeasuresByDeviceRequest {
+    string device_id = 1;
+}
+
+message Geolocation {
+    string type = 1;
+    repeated double coordinates = 2; 
+}
+
+message SensorMetadata {
+    string sensor_id = 1;
+    string type_sensor = 2;
+    repeated string units = 3;
+    Geolocation location = 4;
+}
+
+message Values {
+    double temperature = 1;
+    double humidity = 2;
+    google.protobuf.Timestamp timestamp = 3;
+}
+
+message MeasuresByDeviceResponse {
+    repeated Values values = 1;
+    SensorMetadata sensor_metadata = 2;
+}
+
+
+service MeasuresIoT{
+    rpc GetMeasuresBySensor(MeasuresByDeviceRequest) returns (MeasuresByDeviceResponse);
+}
