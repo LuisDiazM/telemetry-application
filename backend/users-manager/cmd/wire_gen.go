@@ -8,6 +8,9 @@ package cmd
 
 import (
 	"github.com/LuisDiazM/backend/users-manager/app"
+	"github.com/LuisDiazM/backend/users-manager/domain/users/usecases"
+	"github.com/LuisDiazM/backend/users-manager/infraestructure/persistence/mongo"
+	"github.com/LuisDiazM/backend/users-manager/infraestructure/persistence/mongo/repositories/users"
 	"github.com/LuisDiazM/backend/users-manager/infraestructure/server"
 	"github.com/LuisDiazM/backend/users-manager/infraestructure/server/controllers"
 )
@@ -15,7 +18,11 @@ import (
 // Injectors from wire.go:
 
 func CreateApp() *app.Application {
-	usersController := controllers.NewUsersController()
+	mongoSettings := app.GetMongoSettings()
+	mongoImplementation := mongo.NewMongoImplementation(mongoSettings)
+	iUsersDbRepository := users.NewUserDBRepository(mongoImplementation)
+	userUsecases := usecases.NewUserUsecases(iUsersDbRepository)
+	usersController := controllers.NewUsersController(userUsecases)
 	serverGRPCCustom := server.NewServerGRPCCustom(usersController)
 	appSettings := app.GetAppSettings()
 	application := app.NewApplication(serverGRPCCustom, appSettings)

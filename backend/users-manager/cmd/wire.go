@@ -13,6 +13,11 @@ func CreateApp() *app.Application {
 		ServerCustomProvider,
 		UsersControllerProvider,
 		SettingsProvider,
+
+		usersRepoProvider,
+		usersUsecaseProvider,
+		MongoProvider,
+		settingsMongoProvider,
 	)
 	return new(app.Application)
 }

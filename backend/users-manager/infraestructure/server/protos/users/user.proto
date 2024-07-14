@@ -1,11 +1,15 @@
 syntax = "proto3";
 
 package server.controllers;
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/LuisDiazM/backend/users-manager/infraestructure/server/protos/users";
 
 service UsersService {
-  rpc SayHello (PingRequest) returns (PingReply) {}
+  rpc SayHello (PingRequest) returns (PingReply);
+  rpc GetActiveUserByExternalId (UserRequest) returns (UserActiveResponse);
+  rpc SaveUser (SaveUserRequest) returns (MetadataResponse);
+  rpc DeleteUser(UserRequest) returns (MetadataResponse);
 }
 
 message PingRequest {
@@ -16,3 +20,35 @@ message PingReply {
   string message = 1;
 }
 
+message UserRequest{
+  string user_id = 1;
+}
+
+message UserPreferences{
+
+}
+
+message UserActiveResponse{
+  string external_id = 1;
+  string full_name = 2;
+  string email = 3;
+  UserPreferences preferences = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  string role =7;
+  string status = 8;
+}
+
+message SaveUserRequest{
+  string external_id = 1;
+  string full_name = 2;
+  string email = 3;
+  UserPreferences preferences = 4;
+  string role =7;
+  string status = 8;
+}
+
+message MetadataResponse{
+  string key = 1;
+  string description = 2;
+}
