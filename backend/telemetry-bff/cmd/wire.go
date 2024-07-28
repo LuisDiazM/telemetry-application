@@ -10,8 +10,11 @@ import (
 
 func CreateApp() *app.Application {
 	wire.Build(WebServerProvider,
+		CacheProvider,
 		SettingsProvider,
 		SettingsUserService,
+		CacheSettings,
+		UsersCacheRepo,
 		UsersManagerUsecase,
 		UsersManagerRepo,
 		ApplicationProvider)

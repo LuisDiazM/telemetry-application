@@ -8,7 +8,9 @@ package cmd
 
 import (
 	"github.com/LuisDiazM/backend/telemetry-bff/app"
-	"github.com/LuisDiazM/backend/telemetry-bff/domain/usersManager"
+	usersManager2 "github.com/LuisDiazM/backend/telemetry-bff/domain/usersManager"
+	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/cache"
+	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/cache/repositories/usersManager"
 	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/clients/users"
 	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/web"
 )
@@ -20,7 +22,10 @@ func CreateApp() *app.Application {
 	settings := app.GetAppSettings()
 	usersManagerServiceSettings := app.GetUsersManagerHostSettings()
 	iUsersManagerClient := users.NewUsersManagerGrpcClient(usersManagerServiceSettings)
-	usersManagerUsecase := usersManager.NewUsersManagerUsecase(iUsersManagerClient)
+	redisSettings := app.GetCacheSettings()
+	redisImp := cache.NewRedisImp(redisSettings)
+	iUsersManagerCacheRepo := usersManager.NewUsersManagerCacheRepo(redisImp)
+	usersManagerUsecase := usersManager2.NewUsersManagerUsecase(iUsersManagerClient, iUsersManagerCacheRepo)
 	application := app.NewApplication(engine, settings, usersManagerUsecase)
 	return application
 }

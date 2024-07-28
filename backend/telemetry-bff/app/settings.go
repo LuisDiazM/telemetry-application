@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/cache"
 	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/clients/users"
 	"github.com/kelseyhightower/envconfig"
 )
@@ -8,9 +9,10 @@ import (
 var appSettings *Settings
 
 type Settings struct {
-	Port             uint64                             `envconfig:"PORT" required:"true"`
-	Auth0Domain      string                             `envconfig:"AUTH0_DOMAIN" required:"true"`
-	UsersManagerHost *users.UsersManagerServiceSettings `envconfig:"USERS_MANAGER_HOST" required:"true"`
+	Port             uint64 `envconfig:"PORT" required:"true"`
+	Auth0Domain      string `envconfig:"AUTH0_DOMAIN" required:"true"`
+	UsersManagerHost *users.UsersManagerServiceSettings
+	Cache            *cache.RedisSettings
 }
 
 func loadAppSettings() *Settings {
@@ -32,4 +34,8 @@ func GetAppSettings() *Settings {
 
 func GetUsersManagerHostSettings() *users.UsersManagerServiceSettings {
 	return loadAppSettings().UsersManagerHost
+}
+
+func GetCacheSettings() *cache.RedisSettings {
+	return loadAppSettings().Cache
 }
