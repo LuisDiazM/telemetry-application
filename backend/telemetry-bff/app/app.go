@@ -5,19 +5,23 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/LuisDiazM/backend/telemetry-bff/domain/usersManager"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/sync/errgroup"
 )
 
 type Application struct {
-	WebServer *gin.Engine
-	Settings  *Settings
+	WebServer           *gin.Engine
+	Settings            *Settings
+	UsersManagerUsecase *usersManager.UsersManagerUsecase
 }
 
-func NewApplication(webServer *gin.Engine, settings *Settings) *Application {
+func NewApplication(webServer *gin.Engine,
+	settings *Settings, usersManager *usersManager.UsersManagerUsecase) *Application {
 	return &Application{
-		WebServer: webServer,
-		Settings:  settings,
+		WebServer:           webServer,
+		Settings:            settings,
+		UsersManagerUsecase: usersManager,
 	}
 }
 

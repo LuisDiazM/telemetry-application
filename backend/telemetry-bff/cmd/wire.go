@@ -9,6 +9,11 @@ import (
 )
 
 func CreateApp() *app.Application {
-	wire.Build(WebServerProvider, SettingsProvider, ApplicationProvider)
+	wire.Build(WebServerProvider,
+		SettingsProvider,
+		SettingsUserService,
+		UsersManagerUsecase,
+		UsersManagerRepo,
+		ApplicationProvider)
 	return new(app.Application)
 }

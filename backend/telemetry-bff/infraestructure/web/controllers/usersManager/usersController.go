@@ -1,4 +1,4 @@
-package controllers
+package usersManager
 
 import (
 	"net/http"
@@ -9,9 +9,9 @@ import (
 
 func CheckUserController(app *app.Application) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{
-			"status": "online",
-			"sub":    ctx.Request.Header.Get("sub"),
-		})
+		userId := ctx.Request.Header.Get("sub")
+		userData := app.UsersManagerUsecase.GetUserData(ctx, userId)
+
+		ctx.JSON(http.StatusOK, userData)
 	}
 }

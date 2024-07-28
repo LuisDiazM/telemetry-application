@@ -1,12 +1,16 @@
 package app
 
-import "github.com/kelseyhightower/envconfig"
+import (
+	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/clients/users"
+	"github.com/kelseyhightower/envconfig"
+)
 
 var appSettings *Settings
 
 type Settings struct {
-	Port        uint64 `envconfig:"PORT" required:"true"`
-	Auth0Domain string `envconfig:"AUTH0_DOMAIN" required:"true"`
+	Port             uint64                             `envconfig:"PORT" required:"true"`
+	Auth0Domain      string                             `envconfig:"AUTH0_DOMAIN" required:"true"`
+	UsersManagerHost *users.UsersManagerServiceSettings `envconfig:"USERS_MANAGER_HOST" required:"true"`
 }
 
 func loadAppSettings() *Settings {
@@ -24,4 +28,8 @@ func loadAppSettings() *Settings {
 
 func GetAppSettings() *Settings {
 	return loadAppSettings()
+}
+
+func GetUsersManagerHostSettings() *users.UsersManagerServiceSettings {
+	return loadAppSettings().UsersManagerHost
 }

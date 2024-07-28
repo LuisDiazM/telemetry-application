@@ -8,6 +8,8 @@ package cmd
 
 import (
 	"github.com/LuisDiazM/backend/telemetry-bff/app"
+	"github.com/LuisDiazM/backend/telemetry-bff/domain/usersManager"
+	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/clients/users"
 	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/web"
 )
 
@@ -16,6 +18,9 @@ import (
 func CreateApp() *app.Application {
 	engine := web.NewHTTPServer()
 	settings := app.GetAppSettings()
-	application := app.NewApplication(engine, settings)
+	usersManagerServiceSettings := app.GetUsersManagerHostSettings()
+	iUsersManagerClient := users.NewUsersManagerGrpcClient(usersManagerServiceSettings)
+	usersManagerUsecase := usersManager.NewUsersManagerUsecase(iUsersManagerClient)
+	application := app.NewApplication(engine, settings, usersManagerUsecase)
 	return application
 }
