@@ -8,4 +8,5 @@ import (
 
 func RegisterUsersRouter(group *gin.RouterGroup, app *app.Application) {
 	group.GET("/user/me", usersManager.CheckUserController(app))
+	group.POST("/user", usersManager.SaveUserController(app.UsersManagerUsecase))
 }

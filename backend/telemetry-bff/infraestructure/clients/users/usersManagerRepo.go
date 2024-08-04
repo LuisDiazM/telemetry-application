@@ -41,6 +41,17 @@ func (repo *UsersManagerGrpcClient) GetClientById(ctx context.Context, userId st
 	return userProfile
 }
 
+func (repo *UsersManagerGrpcClient) SaveUser(ctx context.Context, userData *entities.SaveUserData) (*entities.SaveUserResponse, error) {
+	client := NewUsersServiceClient(repo.conn)
+	userDataGRPC := MapUserDecodeToGRPCUserRequest(userData)
+	response, err := client.SaveUser(ctx, userDataGRPC)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		return nil, err
+	}
+	return &entities.SaveUserResponse{Key: response.Key, Value: response.Description}, nil
+}
+
 func (repo *UsersManagerGrpcClient) CloseConn() {
 	repo.conn.Close()
 }

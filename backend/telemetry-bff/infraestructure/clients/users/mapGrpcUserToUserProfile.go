@@ -21,3 +21,17 @@ func MapGRPCUserToUserProfile(userResponse *UserActiveResponse) *entities.UserPr
 		Status:      entities.Status(userResponse.Status)}
 	return &userProfile
 }
+
+func MapUserDecodeToGRPCUserRequest(userData *entities.SaveUserData) *SaveUserRequest {
+	if userData == nil {
+		log.Warn().Msg("userData nil")
+		return nil
+	}
+	saveUserRequest := SaveUserRequest{ExternalId: userData.Id,
+		FullName: userData.FullName,
+		Email:    userData.Email, Preferences: &UserPreferences{},
+		Role:   userData.Role,
+		Status: userData.Status}
+
+	return &saveUserRequest
+}

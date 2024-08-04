@@ -29,3 +29,7 @@ func (usecase *UsersManagerUsecase) GetUserData(ctx context.Context, userId stri
 	}
 	return userProfile
 }
+
+func (usecase *UsersManagerUsecase) SaveUserData(ctx context.Context, userData entities.SaveUserData) (*entities.SaveUserResponse, error) {
+	return usecase.grpcClient.SaveUser(ctx, &userData)
+}

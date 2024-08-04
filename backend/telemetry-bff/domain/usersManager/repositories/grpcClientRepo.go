@@ -8,4 +8,5 @@ import (
 
 type IUsersManagerClient interface {
 	GetClientById(ctx context.Context, userId string) *entities.UserProfile
+	SaveUser(ctx context.Context, userData *entities.SaveUserData) (*entities.SaveUserResponse, error)
 }
