@@ -5,5 +5,5 @@ export const config = {
   REDIRECT_URL_AUTH0: import.meta.env.VITE_REDIRECT_URL,
   PUSHER_KEY: import.meta.env.VITE_REACT_APP_PUSHER_KEY,
   PUSHER_CLUSTER: import.meta.env.VITE_REACT_APP_PUSHER_CLUSTER,
-  VITE_REACT_SERVER_BFF: import.meta.env.VITE_REACT_SERVER_BFF
+  SERVER_BFF: import.meta.env.VITE_REACT_SERVER_BFF
 };
