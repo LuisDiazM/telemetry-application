@@ -9,7 +9,11 @@ import (
 )
 
 func CreateApp() *app.Application {
-	wire.Build(AppSettingsProv, HiveMQSettinsProv, HiveMQBroker,
+	wire.Build(AppSettingsProv,
+		HiveMQSettinsProv,
+		HiveMQBroker,
+		GrpcServer,
+		DevicesControllerProv,
 		ApplicationProv)
 
 	return new(app.Application)

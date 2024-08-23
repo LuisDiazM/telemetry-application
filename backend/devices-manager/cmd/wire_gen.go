@@ -9,6 +9,8 @@ package cmd
 import (
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/app"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/messaging"
+	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/server"
+	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/server/controllers"
 )
 
 // Injectors from wire.go:
@@ -17,6 +19,8 @@ func CreateApp() *app.Application {
 	hiveMQSettings := app.GetHiveMQSettings()
 	messagingBroker := messaging.NewMessagingBroker(hiveMQSettings)
 	appSettings := app.GetAppSettings()
-	application := app.NewApplication(messagingBroker, appSettings)
+	devicesController := controllers.NewDevicesController()
+	serverGRPC := server.NewServerGRPC(devicesController)
+	application := app.NewApplication(messagingBroker, appSettings, serverGRPC)
 	return application
 }

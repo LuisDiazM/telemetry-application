@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package server.controllers;
+// import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/LuisDiazM/telemetry-application/backend/devices-manager";
+
+
+message PingRequest{
+
+}
+
+message PingResponse{
+    string message = 1;
+}
+
+service DevicesService{
+    rpc Ping(PingRequest) returns (PingResponse);
+}
