@@ -22,12 +22,12 @@ func CreateApp() *app.Application {
 	hiveMQSettings := app.GetHiveMQSettings()
 	messagingBroker := messaging.NewMessagingBroker(hiveMQSettings)
 	appSettings := app.GetAppSettings()
-	devicesController := controllers.NewDevicesController()
-	serverGRPC := server.NewServerGRPC(devicesController)
 	mongoSettings := app.GetMongoSettings()
 	mongoImplementation := mongodb.NewMongoImplementation(mongoSettings)
 	iDevicesDBRepo := devices.NewDevicesDbRepository(mongoImplementation)
 	devicesUsecase := usecases.NewDevicesUsecase(iDevicesDBRepo)
+	devicesController := controllers.NewDevicesController(devicesUsecase)
+	serverGRPC := server.NewServerGRPC(devicesController)
 	application := app.NewApplication(messagingBroker, appSettings, serverGRPC, devicesUsecase)
 	return application
 }
