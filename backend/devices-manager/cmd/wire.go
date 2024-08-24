@@ -14,6 +14,10 @@ func CreateApp() *app.Application {
 		HiveMQBroker,
 		GrpcServer,
 		DevicesControllerProv,
+		DevicesRepoProv,
+		DevicesUsecaseProv,
+		MongoProv,
+		SettingsMongoProv,
 		ApplicationProv)
 
 	return new(app.Application)

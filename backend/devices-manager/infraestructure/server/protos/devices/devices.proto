@@ -1,19 +1,57 @@
 syntax = "proto3";
 
 package server.controllers;
-// import "google/protobuf/timestamp.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/LuisDiazM/telemetry-application/backend/devices-manager";
 
 
-message PingRequest{
-
-}
+message PingRequest{}
 
 message PingResponse{
     string message = 1;
 }
 
+message DeviceByIdRequest{
+    string sensor_id = 1;
+}
+
+message Location{
+    string type = 1;
+    repeated float coordiantes = 2;
+}
+
+message DeviceData{
+    string sensor_id = 1;
+    string type_sensor = 2;
+    Location location = 3;
+    repeated string units = 4;
+}
+
+message LocationRequests{
+    float latitude = 1;
+    float longitude = 2;
+}
+
+message StatusData {
+    google.protobuf.Timestamp last_ping = 1;
+    DeviceData device = 2;
+}
+
+message StatusDataResponse{
+    repeated StatusData status = 1;
+}
+
+message DevicesDataResponse{
+    repeated DeviceData devices = 1;
+}
+
 service DevicesService{
     rpc Ping(PingRequest) returns (PingResponse);
+    rpc GetDeviceById(DeviceByIdRequest) returns (DeviceData);
+    rpc GetDevicesByLocation(LocationRequests) returns (DevicesDataResponse);
+    rpc CreateDevice(DeviceData) returns (google.protobuf.Empty);
+    rpc DeleteDeviceById(DeviceByIdRequest) returns (google.protobuf.Empty);
+    rpc GetStatusByLocation(LocationRequests) returns (StatusDataResponse);
 }

@@ -8,6 +8,9 @@ package cmd
 
 import (
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/app"
+	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/domain/devices/usecases"
+	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/database/mongodb"
+	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/database/mongodb/repositories/devices"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/messaging"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/server"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/server/controllers"
@@ -21,6 +24,10 @@ func CreateApp() *app.Application {
 	appSettings := app.GetAppSettings()
 	devicesController := controllers.NewDevicesController()
 	serverGRPC := server.NewServerGRPC(devicesController)
-	application := app.NewApplication(messagingBroker, appSettings, serverGRPC)
+	mongoSettings := app.GetMongoSettings()
+	mongoImplementation := mongodb.NewMongoImplementation(mongoSettings)
+	iDevicesDBRepo := devices.NewDevicesDbRepository(mongoImplementation)
+	devicesUsecase := usecases.NewDevicesUsecase(iDevicesDBRepo)
+	application := app.NewApplication(messagingBroker, appSettings, serverGRPC, devicesUsecase)
 	return application
 }

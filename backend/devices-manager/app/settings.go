@@ -3,13 +3,15 @@ package app
 import (
 	"github.com/phuslu/log"
 
+	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/database/mongodb"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/messaging"
 	"github.com/kelseyhightower/envconfig"
 )
 
 type AppSettings struct {
-	Port   string `envconfig:"PORT" default:"50052"`
-	HiveMQ *messaging.HiveMQSettings
+	Port    string `envconfig:"PORT" default:"50052"`
+	HiveMQ  *messaging.HiveMQSettings
+	MongoDB *mongodb.MongoSettings
 }
 
 func GetAppSettings() *AppSettings {
@@ -24,4 +26,8 @@ func GetAppSettings() *AppSettings {
 
 func GetHiveMQSettings() *messaging.HiveMQSettings {
 	return GetAppSettings().HiveMQ
+}
+
+func GetMongoSettings() *mongodb.MongoSettings {
+	return GetAppSettings().MongoDB
 }

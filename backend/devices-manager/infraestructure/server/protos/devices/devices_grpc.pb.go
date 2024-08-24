@@ -8,6 +8,7 @@ package devices_manager
 
 import (
 	context "context"
+	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -23,6 +24,11 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DevicesServiceClient interface {
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	GetDeviceById(ctx context.Context, in *DeviceByIdRequest, opts ...grpc.CallOption) (*DeviceData, error)
+	GetDevicesByLocation(ctx context.Context, in *LocationRequests, opts ...grpc.CallOption) (*DevicesDataResponse, error)
+	CreateDevice(ctx context.Context, in *DeviceData, opts ...grpc.CallOption) (*empty.Empty, error)
+	DeleteDeviceById(ctx context.Context, in *DeviceByIdRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	GetStatusByLocation(ctx context.Context, in *LocationRequests, opts ...grpc.CallOption) (*StatusDataResponse, error)
 }
 
 type devicesServiceClient struct {
@@ -42,11 +48,61 @@ func (c *devicesServiceClient) Ping(ctx context.Context, in *PingRequest, opts .
 	return out, nil
 }
 
+func (c *devicesServiceClient) GetDeviceById(ctx context.Context, in *DeviceByIdRequest, opts ...grpc.CallOption) (*DeviceData, error) {
+	out := new(DeviceData)
+	err := c.cc.Invoke(ctx, "/server.controllers.DevicesService/GetDeviceById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *devicesServiceClient) GetDevicesByLocation(ctx context.Context, in *LocationRequests, opts ...grpc.CallOption) (*DevicesDataResponse, error) {
+	out := new(DevicesDataResponse)
+	err := c.cc.Invoke(ctx, "/server.controllers.DevicesService/GetDevicesByLocation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *devicesServiceClient) CreateDevice(ctx context.Context, in *DeviceData, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/server.controllers.DevicesService/CreateDevice", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *devicesServiceClient) DeleteDeviceById(ctx context.Context, in *DeviceByIdRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/server.controllers.DevicesService/DeleteDeviceById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *devicesServiceClient) GetStatusByLocation(ctx context.Context, in *LocationRequests, opts ...grpc.CallOption) (*StatusDataResponse, error) {
+	out := new(StatusDataResponse)
+	err := c.cc.Invoke(ctx, "/server.controllers.DevicesService/GetStatusByLocation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DevicesServiceServer is the server API for DevicesService service.
 // All implementations must embed UnimplementedDevicesServiceServer
 // for forward compatibility
 type DevicesServiceServer interface {
 	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	GetDeviceById(context.Context, *DeviceByIdRequest) (*DeviceData, error)
+	GetDevicesByLocation(context.Context, *LocationRequests) (*DevicesDataResponse, error)
+	CreateDevice(context.Context, *DeviceData) (*empty.Empty, error)
+	DeleteDeviceById(context.Context, *DeviceByIdRequest) (*empty.Empty, error)
+	GetStatusByLocation(context.Context, *LocationRequests) (*StatusDataResponse, error)
 	mustEmbedUnimplementedDevicesServiceServer()
 }
 
@@ -56,6 +112,21 @@ type UnimplementedDevicesServiceServer struct {
 
 func (UnimplementedDevicesServiceServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+}
+func (UnimplementedDevicesServiceServer) GetDeviceById(context.Context, *DeviceByIdRequest) (*DeviceData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDeviceById not implemented")
+}
+func (UnimplementedDevicesServiceServer) GetDevicesByLocation(context.Context, *LocationRequests) (*DevicesDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDevicesByLocation not implemented")
+}
+func (UnimplementedDevicesServiceServer) CreateDevice(context.Context, *DeviceData) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateDevice not implemented")
+}
+func (UnimplementedDevicesServiceServer) DeleteDeviceById(context.Context, *DeviceByIdRequest) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteDeviceById not implemented")
+}
+func (UnimplementedDevicesServiceServer) GetStatusByLocation(context.Context, *LocationRequests) (*StatusDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStatusByLocation not implemented")
 }
 func (UnimplementedDevicesServiceServer) mustEmbedUnimplementedDevicesServiceServer() {}
 
@@ -88,6 +159,96 @@ func _DevicesService_Ping_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DevicesService_GetDeviceById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeviceByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DevicesServiceServer).GetDeviceById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/server.controllers.DevicesService/GetDeviceById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DevicesServiceServer).GetDeviceById(ctx, req.(*DeviceByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DevicesService_GetDevicesByLocation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LocationRequests)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DevicesServiceServer).GetDevicesByLocation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/server.controllers.DevicesService/GetDevicesByLocation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DevicesServiceServer).GetDevicesByLocation(ctx, req.(*LocationRequests))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DevicesService_CreateDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeviceData)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DevicesServiceServer).CreateDevice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/server.controllers.DevicesService/CreateDevice",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DevicesServiceServer).CreateDevice(ctx, req.(*DeviceData))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DevicesService_DeleteDeviceById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeviceByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DevicesServiceServer).DeleteDeviceById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/server.controllers.DevicesService/DeleteDeviceById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DevicesServiceServer).DeleteDeviceById(ctx, req.(*DeviceByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DevicesService_GetStatusByLocation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LocationRequests)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DevicesServiceServer).GetStatusByLocation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/server.controllers.DevicesService/GetStatusByLocation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DevicesServiceServer).GetStatusByLocation(ctx, req.(*LocationRequests))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DevicesService_ServiceDesc is the grpc.ServiceDesc for DevicesService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +259,26 @@ var DevicesService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Ping",
 			Handler:    _DevicesService_Ping_Handler,
+		},
+		{
+			MethodName: "GetDeviceById",
+			Handler:    _DevicesService_GetDeviceById_Handler,
+		},
+		{
+			MethodName: "GetDevicesByLocation",
+			Handler:    _DevicesService_GetDevicesByLocation_Handler,
+		},
+		{
+			MethodName: "CreateDevice",
+			Handler:    _DevicesService_CreateDevice_Handler,
+		},
+		{
+			MethodName: "DeleteDeviceById",
+			Handler:    _DevicesService_DeleteDeviceById_Handler,
+		},
+		{
+			MethodName: "GetStatusByLocation",
+			Handler:    _DevicesService_GetStatusByLocation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

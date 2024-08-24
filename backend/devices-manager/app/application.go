@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 
+	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/domain/devices/usecases"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/messaging"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/server"
 	"github.com/phuslu/log"
@@ -18,16 +19,19 @@ type Application struct {
 	ApplicationSettings *AppSettings
 	GRPCServer          *grpc.Server
 	SrvCustom           *server.ServerGRPC
+	DevicesUsecase      *usecases.DevicesUsecase
 }
 
 func NewApplication(messaging *messaging.MessagingBroker,
-	appSettings *AppSettings, srvCustom *server.ServerGRPC) *Application {
+	appSettings *AppSettings, srvCustom *server.ServerGRPC,
+	devicesUsecase *usecases.DevicesUsecase) *Application {
 	s := grpc.NewServer()
 	return &Application{
 		MessagingBroker:     messaging,
 		ApplicationSettings: appSettings,
 		GRPCServer:          s,
 		SrvCustom:           srvCustom,
+		DevicesUsecase:      devicesUsecase,
 	}
 }
 
