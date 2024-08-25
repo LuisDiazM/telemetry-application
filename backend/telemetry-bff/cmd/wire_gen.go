@@ -8,9 +8,11 @@ package cmd
 
 import (
 	"github.com/LuisDiazM/backend/telemetry-bff/app"
+	"github.com/LuisDiazM/backend/telemetry-bff/domain/devicesManager/usecases"
 	usersManager2 "github.com/LuisDiazM/backend/telemetry-bff/domain/usersManager"
 	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/cache"
 	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/cache/repositories/usersManager"
+	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/clients/devices_manager"
 	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/clients/users"
 	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/web"
 )
@@ -26,6 +28,9 @@ func CreateApp() *app.Application {
 	redisImp := cache.NewRedisImp(redisSettings)
 	iUsersManagerCacheRepo := usersManager.NewUsersManagerCacheRepo(redisImp)
 	usersManagerUsecase := usersManager2.NewUsersManagerUsecase(iUsersManagerClient, iUsersManagerCacheRepo)
-	application := app.NewApplication(engine, settings, usersManagerUsecase)
+	deviceSettings := app.GetDevicesManagerSettings()
+	igrpcClientDeviceRepo := devices_manager.NewDevicesManagerGRPCClientRepo(deviceSettings)
+	deviceManagerUsecase := usecases.NewDeviceManagerUsecase(igrpcClientDeviceRepo)
+	application := app.NewApplication(engine, settings, usersManagerUsecase, deviceManagerUsecase)
 	return application
 }

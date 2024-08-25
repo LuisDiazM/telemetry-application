@@ -21,10 +21,6 @@ func NewDevicesController(deviceUsecase *usecases.DevicesUsecase) *DevicesContro
 	return &DevicesController{Usecase: deviceUsecase}
 }
 
-func (controller *DevicesController) Ping(ctx context.Context, in *pb.PingRequest) (*pb.PingResponse, error) {
-	return &pb.PingResponse{Message: "Hellow"}, nil
-}
-
 func (controller *DevicesController) GetDeviceById(ctx context.Context, in *pb.DeviceByIdRequest) (*pb.DeviceData, error) {
 	deviceData := controller.Usecase.GetDeviceById(ctx, in.SensorId)
 	if deviceData == nil {

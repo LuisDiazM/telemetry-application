@@ -7,11 +7,6 @@ import "google/protobuf/empty.proto";
 option go_package = "github.com/LuisDiazM/telemetry-application/backend/devices-manager";
 
 
-message PingRequest{}
-
-message PingResponse{
-    string message = 1;
-}
 
 message DeviceByIdRequest{
     string sensor_id = 1;
@@ -47,7 +42,6 @@ message DevicesDataResponse{
 }
 
 service DevicesService{
-    rpc Ping(PingRequest) returns (PingResponse);
     rpc GetDeviceById(DeviceByIdRequest) returns (DeviceData);
     rpc GetDevicesByLocation(LocationRequests) returns (DevicesDataResponse);
     rpc CreateDevice(DeviceData) returns (google.protobuf.Empty);

@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/cache"
+	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/clients/devices_manager"
 	"github.com/LuisDiazM/backend/telemetry-bff/infraestructure/clients/users"
 	"github.com/kelseyhightower/envconfig"
 )
@@ -9,10 +10,11 @@ import (
 var appSettings *Settings
 
 type Settings struct {
-	Port             uint64 `envconfig:"PORT" required:"true"`
-	Auth0Domain      string `envconfig:"AUTH0_DOMAIN" required:"true"`
-	UsersManagerHost *users.UsersManagerServiceSettings
-	Cache            *cache.RedisSettings
+	Port              uint64 `envconfig:"PORT" required:"true"`
+	Auth0Domain       string `envconfig:"AUTH0_DOMAIN" required:"true"`
+	UsersManagerHost  *users.UsersManagerServiceSettings
+	DeviceManagerHost *devices_manager.DeviceSettings
+	Cache             *cache.RedisSettings
 }
 
 func loadAppSettings() *Settings {
@@ -38,4 +40,8 @@ func GetUsersManagerHostSettings() *users.UsersManagerServiceSettings {
 
 func GetCacheSettings() *cache.RedisSettings {
 	return loadAppSettings().Cache
+}
+
+func GetDevicesManagerSettings() *devices_manager.DeviceSettings {
+	return loadAppSettings().DeviceManagerHost
 }

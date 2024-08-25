@@ -20,4 +20,5 @@ func SetUpRoutes(app *app.Application) {
 
 	//privates
 	RegisterUsersRouter(privateRoutesV1, app)
+	RegisterDevicesRouter(privateRoutesV1, app)
 }

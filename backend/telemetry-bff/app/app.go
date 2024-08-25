@@ -5,23 +5,28 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/LuisDiazM/backend/telemetry-bff/domain/devicesManager/usecases"
 	"github.com/LuisDiazM/backend/telemetry-bff/domain/usersManager"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/sync/errgroup"
 )
 
 type Application struct {
-	WebServer           *gin.Engine
-	Settings            *Settings
-	UsersManagerUsecase *usersManager.UsersManagerUsecase
+	WebServer             *gin.Engine
+	Settings              *Settings
+	UsersManagerUsecase   *usersManager.UsersManagerUsecase
+	DevicesManagerUsecase *usecases.DeviceManagerUsecase
 }
 
 func NewApplication(webServer *gin.Engine,
-	settings *Settings, usersManager *usersManager.UsersManagerUsecase) *Application {
+	settings *Settings,
+	usersManager *usersManager.UsersManagerUsecase,
+	devicesManager *usecases.DeviceManagerUsecase) *Application {
 	return &Application{
-		WebServer:           webServer,
-		Settings:            settings,
-		UsersManagerUsecase: usersManager,
+		WebServer:             webServer,
+		Settings:              settings,
+		UsersManagerUsecase:   usersManager,
+		DevicesManagerUsecase: devicesManager,
 	}
 }
 

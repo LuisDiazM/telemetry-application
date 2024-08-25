@@ -17,6 +17,9 @@ func CreateApp() *app.Application {
 		UsersCacheRepo,
 		UsersManagerUsecase,
 		UsersManagerRepo,
+		DevicesManagerRepo,
+		SettingsDevicesManager,
+		DevicesMAnagerUsecase,
 		ApplicationProvider)
 	return new(app.Application)
 }

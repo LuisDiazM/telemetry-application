@@ -8,6 +8,7 @@ require (
 	github.com/golang/protobuf v1.5.4
 	github.com/google/wire v0.6.0
 	github.com/kelseyhightower/envconfig v1.4.0
+	github.com/redis/go-redis/v9 v9.0.0-rc.4
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.1
 )
@@ -37,7 +38,6 @@ require (
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.45.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
-	github.com/redis/go-redis/v9 v9.0.0-rc.4 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	github.com/vmihailenco/go-tinylfu v0.2.2 // indirect
@@ -53,8 +53,6 @@ require (
 require (
 	github.com/Depado/ginprom v1.8.1
 	github.com/go-redis/cache/v9 v9.0.0
-	github.com/golang-jwt/jwt v3.2.2+incompatible
-	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/phuslu/log v1.0.107
 	golang.org/x/crypto v0.23.0 // indirect
 	golang.org/x/sync v0.7.0
