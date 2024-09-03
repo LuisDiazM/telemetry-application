@@ -9,4 +9,5 @@ import (
 func RegisterDevicesRouter(group *gin.RouterGroup, app *app.Application) {
 	group.GET("/device/:id", devicesmanager.GetDeviceById(app))
 	group.GET("/devices", devicesmanager.GetDevicesByLocation(app))
+	group.GET("/status", devicesmanager.GetStatusByLocation(app))
 }

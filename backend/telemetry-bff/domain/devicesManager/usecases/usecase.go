@@ -22,3 +22,7 @@ func (usecase *DeviceManagerUsecase) GetDeviceById(ctx context.Context, deviceId
 func (usecase *DeviceManagerUsecase) GetDevicesByLocation(ctx context.Context, location entities.Location) *[]entities.DeviceData {
 	return usecase.grpcDeviceClient.GetDevicesByLocation(ctx, location)
 }
+
+func (usecase *DeviceManagerUsecase) GetStatusDevicesByLocation(ctx context.Context, location entities.Location) *[]entities.Status {
+	return usecase.grpcDeviceClient.GetStatusByLocation(ctx, location)
+}

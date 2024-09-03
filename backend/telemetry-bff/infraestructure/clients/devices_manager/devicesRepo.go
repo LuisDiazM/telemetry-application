@@ -51,3 +51,14 @@ func (repo *DevicesManagerGRPCClientRepo) GetDevicesByLocation(ctx context.Conte
 	}
 	return ParseDevicesGRPCtoDevices(response)
 }
+
+func (repo *DevicesManagerGRPCClientRepo) GetStatusByLocation(ctx context.Context, locationReq entities.Location) *[]entities.Status {
+	client := NewDevicesServiceClient(repo.conn)
+	location := ParseLocationToGRPC(&locationReq)
+	response, err := client.GetStatusByLocation(ctx, location)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		return nil
+	}
+	return ParseStatusDataResponseToStatus(response)
+}

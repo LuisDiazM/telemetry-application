@@ -54,3 +54,33 @@ func GetDevicesByLocation(app *app.Application) gin.HandlerFunc {
 		ctx.JSON(http.StatusOK, devices)
 	}
 }
+
+func GetStatusByLocation(app *app.Application) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		latitude, latOk := ctx.GetQuery("latitude")
+		longitude, longOk := ctx.GetQuery("longitude")
+
+		if !latOk || !longOk {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"error": "no latitude or longitude",
+			})
+			return
+		}
+		lat, errLat := strconv.ParseFloat(latitude, 64)
+		long, errLong := strconv.ParseFloat(longitude, 64)
+
+		if errLat != nil || errLong != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"error": "lat or long not float",
+			})
+			return
+		}
+		location := entities.Location{Type: entities.Point, Coordinates: []float64{lat, long}}
+		devices := app.DevicesManagerUsecase.GetStatusDevicesByLocation(ctx.Request.Context(), location)
+		if devices == nil {
+			ctx.JSON(http.StatusNoContent, nil)
+			return
+		}
+		ctx.JSON(http.StatusOK, devices)
+	}
+}
