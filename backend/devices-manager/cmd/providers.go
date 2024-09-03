@@ -6,6 +6,7 @@ import (
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/database/mongodb"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/database/mongodb/repositories/devices"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/messaging"
+	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/pusher"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/server"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/server/controllers"
 	"github.com/google/wire"
@@ -18,6 +19,8 @@ var HiveMQBroker = wire.NewSet(messaging.NewMessagingBroker)
 var GrpcServer = wire.NewSet(server.NewServerGRPC)
 var MongoProv = wire.NewSet(mongodb.NewMongoImplementation)
 var SettingsMongoProv = wire.NewSet(app.GetMongoSettings)
+var PusherSettings = wire.NewSet(app.GetPusherSettings)
+var PusherProv = wire.NewSet(pusher.NewPusherImp)
 
 // repositories
 var DevicesRepoProv = wire.NewSet(devices.NewDevicesDbRepository)

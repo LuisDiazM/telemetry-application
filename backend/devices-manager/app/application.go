@@ -7,6 +7,7 @@ import (
 
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/domain/devices/usecases"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/messaging"
+	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/pusher"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/server"
 	"github.com/phuslu/log"
 	"golang.org/x/sync/errgroup"
@@ -18,12 +19,13 @@ type Application struct {
 	MessagingBroker     *messaging.MessagingBroker
 	ApplicationSettings *AppSettings
 	GRPCServer          *grpc.Server
+	Pusher              *pusher.PusherImp
 	SrvCustom           *server.ServerGRPC
 	DevicesUsecase      *usecases.DevicesUsecase
 }
 
 func NewApplication(messaging *messaging.MessagingBroker,
-	appSettings *AppSettings, srvCustom *server.ServerGRPC,
+	appSettings *AppSettings, pusher *pusher.PusherImp, srvCustom *server.ServerGRPC,
 	devicesUsecase *usecases.DevicesUsecase) *Application {
 	s := grpc.NewServer()
 	return &Application{
@@ -32,6 +34,7 @@ func NewApplication(messaging *messaging.MessagingBroker,
 		GRPCServer:          s,
 		SrvCustom:           srvCustom,
 		DevicesUsecase:      devicesUsecase,
+		Pusher:              pusher,
 	}
 }
 

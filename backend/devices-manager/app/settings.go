@@ -5,6 +5,7 @@ import (
 
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/database/mongodb"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/messaging"
+	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/pusher"
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -12,6 +13,7 @@ type AppSettings struct {
 	Port    string `envconfig:"PORT" default:"50052"`
 	HiveMQ  *messaging.HiveMQSettings
 	MongoDB *mongodb.MongoSettings
+	Pusher  *pusher.PusherSettings
 }
 
 func GetAppSettings() *AppSettings {
@@ -30,4 +32,8 @@ func GetHiveMQSettings() *messaging.HiveMQSettings {
 
 func GetMongoSettings() *mongodb.MongoSettings {
 	return GetAppSettings().MongoDB
+}
+
+func GetPusherSettings() *pusher.PusherSettings {
+	return GetAppSettings().Pusher
 }

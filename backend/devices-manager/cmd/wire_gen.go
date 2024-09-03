@@ -12,6 +12,7 @@ import (
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/database/mongodb"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/database/mongodb/repositories/devices"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/messaging"
+	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/pusher"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/server"
 	"github.com/LuisDiazM/telemetry-application/backend/devices-manager/infraestructure/server/controllers"
 )
@@ -22,12 +23,14 @@ func CreateApp() *app.Application {
 	hiveMQSettings := app.GetHiveMQSettings()
 	messagingBroker := messaging.NewMessagingBroker(hiveMQSettings)
 	appSettings := app.GetAppSettings()
+	pusherSettings := app.GetPusherSettings()
+	pusherImp := pusher.NewPusherImp(pusherSettings)
 	mongoSettings := app.GetMongoSettings()
 	mongoImplementation := mongodb.NewMongoImplementation(mongoSettings)
 	iDevicesDBRepo := devices.NewDevicesDbRepository(mongoImplementation)
 	devicesUsecase := usecases.NewDevicesUsecase(iDevicesDBRepo)
 	devicesController := controllers.NewDevicesController(devicesUsecase)
 	serverGRPC := server.NewServerGRPC(devicesController)
-	application := app.NewApplication(messagingBroker, appSettings, serverGRPC, devicesUsecase)
+	application := app.NewApplication(messagingBroker, appSettings, pusherImp, serverGRPC, devicesUsecase)
 	return application
 }

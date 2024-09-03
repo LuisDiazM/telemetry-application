@@ -18,6 +18,8 @@ func CreateApp() *app.Application {
 		DevicesUsecaseProv,
 		MongoProv,
 		SettingsMongoProv,
+		PusherSettings,
+		PusherProv,
 		ApplicationProv)
 
 	return new(app.Application)
