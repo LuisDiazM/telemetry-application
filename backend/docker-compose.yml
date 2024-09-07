@@ -1,0 +1,27 @@
+version: '3.3'
+
+services: 
+
+    telemetry-bff:
+        build: telemetry-bff/.
+        image: telemetry-bff:v1
+        restart: always
+        network_mode: host
+        env_file:
+          - telemetry-bff/.env
+    
+    devices-manager:
+        build: devices-manager/.
+        image: devices-manager:v1
+        restart: always
+        network_mode: host
+        env_file:
+          - devices-manager/.env
+
+    users-manager:
+        build: users-manager/.
+        image: users-manager:v1
+        restart: always
+        network_mode: host
+        env_file:
+          - users-manager/.env
