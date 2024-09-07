@@ -1,6 +1,7 @@
 import { Divider } from '@mui/material';
 import MenuAppBar from '../../shared/nav-bar/navbar';
 import Charts from './components/charts';
+import RealtimeDevices from './realtimeDevices';
 
 const DashboardPage = () => {
 
@@ -22,7 +23,7 @@ const DashboardPage = () => {
         <div></div>
         <Divider></Divider>
 
-      
+      <RealtimeDevices></RealtimeDevices>
       </div>
     </>
   );

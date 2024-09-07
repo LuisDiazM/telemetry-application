@@ -15,6 +15,7 @@ const RealtimeDevices = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     channel.bind('status', (data: any) => {
       const statusWs = data?.status ?? false;
+      console.log(data)
       setStatus(statusWs)
     });
     return () => {

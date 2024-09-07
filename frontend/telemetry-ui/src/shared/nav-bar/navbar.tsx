@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -16,14 +16,16 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+// const pages = ['Dispositivos'];
 const settings = [
-  { title: 'Profile', link: '/profile' },
-  { title: 'Dashboard', link: '/dashboard' },
+  { title: 'Perfil', link: '/profile' },
+  { title: 'Mediciones', link: '/dashboard' },
   { title: 'Salir', link: '/logout' },
 ];
 
 const MenuAppBar = () => {
+  const navigate = useNavigate();
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -36,6 +38,10 @@ const MenuAppBar = () => {
   };
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
+  };
+
+  const handleDevices = () => {
+    navigate('/devices');
   };
 
   const handleCloseNavMenu = () => {
@@ -98,11 +104,9 @@ const MenuAppBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign='center'>{page}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem key='dispositivos' onClick={handleDevices}>
+                <Typography textAlign='center'>Dispositivos</Typography>
+              </MenuItem>
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -125,15 +129,13 @@ const MenuAppBar = () => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key="dispositivos"
+                onClick={handleDevices}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                Dispositivos
               </Button>
-            ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -160,7 +162,14 @@ const MenuAppBar = () => {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting.title} onClick={handleCloseUserMenu}>
-                  <Link to={setting.link} style={{ textDecoration: 'none', color: 'inherit', width:'100%' }}>
+                  <Link
+                    to={setting.link}
+                    style={{
+                      textDecoration: 'none',
+                      color: 'inherit',
+                      width: '100%',
+                    }}
+                  >
                     <Typography textAlign='center'>{setting.title}</Typography>
                   </Link>
                 </MenuItem>
