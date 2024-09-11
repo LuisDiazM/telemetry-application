@@ -1,29 +1,42 @@
 import { Divider } from '@mui/material';
 import MenuAppBar from '../../shared/nav-bar/navbar';
 import Charts from './components/charts';
-import RealtimeDevices from './realtimeDevices';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const DashboardPage = () => {
+  const { device_id } = useParams();
 
+  useEffect(() => {
+    console.log(device_id);
 
+    return () => {};
+  }, []);
 
-
-  const xAxisData: Array<Date> = [ new Date('2023-01-02'), new Date('2023-01-03'), new Date('2023-01-20')]
-  const yAxisData: Array<number> = [20, 25, -5]
-  const xLabel: string = "Tiempo"
-  const yLabel: string = "°C"
-  const title: string = "temperatura";
+  const xAxisData: Array<Date> = [
+    new Date('2023-01-02'),
+    new Date('2023-01-03'),
+    new Date('2023-01-20'),
+  ];
+  const yAxisData: Array<number> = [20, 25, -5];
+  const xLabel: string = 'Tiempo';
+  const yLabel: string = '°C';
+  const title: string = 'temperatura';
 
   return (
     <>
       <MenuAppBar></MenuAppBar>
       <div>
-        <Charts title={title} xAxisData={xAxisData} xLabel={xLabel} yAxisData={yAxisData} yLabel={yLabel}></Charts>
+        <Charts
+          title={title}
+          xAxisData={xAxisData}
+          xLabel={xLabel}
+          yAxisData={yAxisData}
+          yLabel={yLabel}
+        ></Charts>
 
         <div></div>
         <Divider></Divider>
-
-      <RealtimeDevices></RealtimeDevices>
       </div>
     </>
   );

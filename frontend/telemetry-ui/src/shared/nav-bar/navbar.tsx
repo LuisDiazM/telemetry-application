@@ -19,12 +19,12 @@ import AdbIcon from '@mui/icons-material/Adb';
 // const pages = ['Dispositivos'];
 const settings = [
   { title: 'Perfil', link: '/profile' },
-  { title: 'Mediciones', link: '/dashboard' },
   { title: 'Salir', link: '/logout' },
 ];
 
 const MenuAppBar = () => {
   const navigate = useNavigate();
+
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
@@ -52,6 +52,8 @@ const MenuAppBar = () => {
     setAnchorElUser(null);
   };
 
+
+  
   return (
     <AppBar position='static'>
       <Container maxWidth='xl'>

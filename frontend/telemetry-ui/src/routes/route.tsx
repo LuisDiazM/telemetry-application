@@ -10,6 +10,6 @@ export const route = createBrowserRouter([
   { path: '/login', Component: LoginPage },
   { path: '/logout', Component: LogoutPage },
   { path: '/profile', Component: UserProfilePage },
-  { path: '/dashboard', Component: DashboardPage },
+  { path: '/dashboard/:device_id', Component: DashboardPage },
   { path: '/devices', Component: DevicesPage },
 ]);

@@ -1,32 +1,18 @@
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import MenuAppBar from '../../shared/nav-bar/navbar';
 import api from '../../services/apiService';
 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { List, ListItemButton, ListItemText } from '@mui/material';
-
-interface Location {
-  lat: number;
-  long: number;
-}
-
-interface DeviceLocation {
-  type: string;
-  coordinates: Array<number>;
-}
-
-interface DeviceInfo {
-  sensor_id: string;
-  location: DeviceLocation;
-  type_sensor: string;
-  units: Array<string>;
-}
-
-interface DeviceData {
-  last_ping: Date;
-  device: DeviceInfo;
-}
+import { DeviceData } from './entities/devices';
+import { Location } from './entities/devices';
+import { useNavigate } from 'react-router-dom';
+import Pusher from 'pusher-js';
+import { config } from '../../config/config';
+import { addStatusDevice } from './entities/WssStatusDevices.store';
 
 const blinkingStyle = {
   animation: 'blink 1s infinite',
@@ -44,6 +30,10 @@ const keyframes = `
 styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
 
 const DevicesPage = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const devicesStatusStore = useSelector((store: any) => store.wsStatus);
+  const navigate = useNavigate();
+
   const [location, setLocation] = useState<Location | undefined>(undefined);
   const [devices, setDevices] = useState<Array<DeviceData>>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -62,6 +52,8 @@ const DevicesPage = () => {
       setLoading(false);
     }
   };
+
+  const dispatcher = useDispatch();
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -82,6 +74,21 @@ const DevicesPage = () => {
       setError('Geolocation is not supported by this browser.');
       setLoading(false);
     }
+
+    const pusher = new Pusher(config.PUSHER_KEY, {
+      cluster: config.PUSHER_CLUSTER,
+    });
+
+    const channel = pusher.subscribe('devices');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    channel.bind('status', (data: any) => {
+      dispatcher(addStatusDevice(data?.device_id));
+    });
+
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+    };
   }, []);
 
   if (loading) {
@@ -92,13 +99,26 @@ const DevicesPage = () => {
     return <div>Error: {error}</div>;
   }
 
+  const checkStatus = (deviceId: string): boolean => {
+    const status = devicesStatusStore?.devicesByWs || [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return status.some((el: any) => el == deviceId);
+  };
+
+  const navigateToDashboard = (
+    deviceId: string
+  ): MouseEventHandler<HTMLDivElement> | undefined => {
+    navigate(`/dashboard/${deviceId}`);
+    return;
+  };
+
   return (
     <>
       <MenuAppBar />
-      <div style={{ height: '600px', width: '100%' }}>
+      <div style={{ height: '600px', width: '80%' }}>
         {location && (
           <MapContainer
-            zoom={20}
+            zoom={13}
             center={[location.lat, location.long]}
             style={{ height: '100%', width: '100%' }}
           >
@@ -126,7 +146,13 @@ const DevicesPage = () => {
         <List>
           {devices.map((device) => {
             return (
-              <ListItemButton style={blinkingStyle}>
+              <ListItemButton
+                onClick={() => navigateToDashboard(device.device.sensor_id)}
+                key={device.device.sensor_id}
+                style={
+                  checkStatus(device.device.sensor_id) ? blinkingStyle : {}
+                }
+              >
                 <ListItemText primary={device.device.sensor_id} />
                 <ListItemText
                   primary={device.device.type_sensor}
