@@ -1,7 +1,6 @@
 import { LineChart } from '@mui/x-charts/LineChart';
 import { useEffect, useState } from 'react';
 
-
 type ChartsProps = {
   xAxisData: Array<Date>;
   yAxisData: Array<number>;
@@ -9,9 +8,14 @@ type ChartsProps = {
   yLabel: string;
   title: string;
 };
-const Charths: React.FC<ChartsProps> = ({xAxisData, xLabel, yLabel, title, yAxisData}) => {
+const Charths: React.FC<ChartsProps> = ({
+  xAxisData,
+  xLabel,
+  yLabel,
+  title,
+  yAxisData,
+}) => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
   useEffect(() => {
     const calculateDimensions = () => {
       const width = window.innerWidth * 0.6;
@@ -29,10 +33,8 @@ const Charths: React.FC<ChartsProps> = ({xAxisData, xLabel, yLabel, title, yAxis
         xAxis={[
           {
             label: xLabel,
-            data: [
-             ...xAxisData
-            ],
-            scaleType:"time"
+            data: [...xAxisData],
+            scaleType: 'time',
           },
         ]}
         series={[
@@ -44,7 +46,7 @@ const Charths: React.FC<ChartsProps> = ({xAxisData, xLabel, yLabel, title, yAxis
         width={dimensions.width}
         height={dimensions.height}
         grid={{ vertical: true, horizontal: true }}
-        title= {title}
+        title={title}
       />
     </div>
   );

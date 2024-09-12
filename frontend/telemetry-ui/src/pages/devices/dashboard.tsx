@@ -1,42 +1,86 @@
-import { Divider } from '@mui/material';
+import { Card, CardContent, CircularProgress, Divider, Typography } from '@mui/material';
 import MenuAppBar from '../../shared/nav-bar/navbar';
 import Charts from './components/charts';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import api from '../../services/apiService';
+import { MeasuresData, Value } from './entities/measures';
 
 const DashboardPage = () => {
   const { device_id } = useParams();
 
-  useEffect(() => {
-    console.log(device_id);
+  const [measures, setMeasures] = useState<MeasuresData>();
 
+  useEffect(() => {
+    const getMeasures = async () => {
+      const result = await api.get(`/measures/${device_id}`);
+      if (result.data != null) {
+        let data = result.data as MeasuresData;
+        const values = data.values.sort(compareByTimestamp);
+        data = { ...data, values: [...values] };
+        setMeasures(data);
+      }
+    };
+    getMeasures();
     return () => {};
   }, []);
 
-  const xAxisData: Array<Date> = [
-    new Date('2023-01-02'),
-    new Date('2023-01-03'),
-    new Date('2023-01-20'),
-  ];
-  const yAxisData: Array<number> = [20, 25, -5];
-  const xLabel: string = 'Tiempo';
-  const yLabel: string = '°C';
-  const title: string = 'temperatura';
+  useEffect(() => {}, [setMeasures]);
+
+  const compareByTimestamp = (a: Value, b: Value): number => {
+    return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+  };
 
   return (
     <>
       <MenuAppBar></MenuAppBar>
       <div>
-        <Charts
-          title={title}
-          xAxisData={xAxisData}
-          xLabel={xLabel}
-          yAxisData={yAxisData}
-          yLabel={yLabel}
-        ></Charts>
+        <Card sx={{ minWidth: 275 }}>
+          <CardContent>
+            <Typography
+              gutterBottom
+              sx={{ color: 'text.primary', fontSize: 20 }}
+            >
+              Información del dispositivo
+            </Typography>
 
-        <div></div>
+            <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+              {measures?.sensor_metadata.sensor_id}
+            </Typography>
+            <Typography variant='body2'>
+              {measures?.sensor_metadata.type_sensor}
+              <br />
+              {measures?.sensor_metadata.units}
+            </Typography>
+          </CardContent>
+        </Card>
+        {measures?.values ? (
+          <Charts
+            title={'Temperatura'}
+            xAxisData={
+              measures?.values.map((el) => new Date(el.timestamp)) || []
+            }
+            xLabel={'tiempo'}
+            yAxisData={measures?.values.map((el) => el.temperature) || []}
+            yLabel={'°C'}
+          ></Charts>
+        ) : (
+          <CircularProgress />
+        )}
         <Divider></Divider>
+        {measures?.values ? (
+          <Charts
+            title={'Humedad Relativa'}
+            xAxisData={
+              measures?.values.map((el) => new Date(el.timestamp)) || []
+            }
+            xLabel={'tiempo'}
+            yAxisData={measures?.values.map((el) => el.humidity) || []}
+            yLabel={'%'}
+          ></Charts>
+        ) : (
+          <CircularProgress/>
+        )}
       </div>
     </>
   );
