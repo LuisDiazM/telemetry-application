@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	topicDevices = "devices/data"
+	topicDevices = "measures"
 )
 
 func (appl *Application) SaveDevicesData(ctx context.Context) {
@@ -22,8 +22,8 @@ func (appl *Application) SaveDevicesData(ctx context.Context) {
 		err := json.Unmarshal(m.Payload(), &requestData)
 		if err != nil {
 			log.Error().Msg(err.Error())
+			return
 		}
-
 		appl.DeviceUsecase.SaveDeviceRegistries(ctx, requestData)
 		t2 := time.Since(t1)
 		log.Info().Msg(fmt.Sprintf(`%s took %d ms`, string(m.Payload()), t2.Milliseconds()))

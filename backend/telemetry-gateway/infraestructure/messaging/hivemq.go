@@ -31,11 +31,12 @@ func NewMessagingBroker(settings *HiveMQSettings) *MessagingBroker {
 }
 
 func (hive *MessagingBroker) Subscribe(topic string, callback mqtt.MessageHandler) {
-	token := hive.Client.Subscribe(topic, 1, callback)
+	token := hive.Client.Subscribe(topic, 0, callback)
 	token.Wait()
 	// Check for errors during subscribe
 	if token.Error() != nil {
 		log.Error().Msg(fmt.Sprintf(`failed to subscribe topic %s %s`, topic, token.Error().Error()))
+		panic(token.Error())
 	}
 	log.Info().Msg(fmt.Sprintf(`"Subscribed to topic: %s"`, topic))
 }

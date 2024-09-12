@@ -15,8 +15,8 @@ hostname = os.getenv("HIVE_MQ_URL")
 sslSettings = ssl.SSLContext(mqtt.client.ssl.PROTOCOL_TLS)
 auth = {'username': username, 'password': password}
 
-data = {'temperature': 25.8, 'humidity': 0.5, "device_id":"fd6c:6361:7a9f:0:6c90:5591:8ea8:xxxx"}
-topic = "devices/data"
+data = {'temperature': -5, 'humidity': 0.9, "device_id":"fd6c:6361:7a9f:0:6c90:5591:8ea8:xxxx"}
+topic = "measures"
 
 payload = json.dumps(data)
 
