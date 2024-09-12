@@ -20,6 +20,10 @@ func CreateApp() *app.Application {
 		DevicesManagerRepo,
 		SettingsDevicesManager,
 		DevicesMAnagerUsecase,
-		ApplicationProvider)
+		ApplicationProvider,
+		SettingsGetTelemetryAnalysisSettings,
+		TelemetryAnalysisRepo,
+		TelemetryAnalysisUsecae,
+	)
 	return new(app.Application)
 }
