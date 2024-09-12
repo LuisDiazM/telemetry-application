@@ -25,3 +25,19 @@ services:
         network_mode: host
         env_file:
           - users-manager/.env
+
+    telemetry-analysis:
+        build: telemetry-analysis/.
+        image: telemetry-analysis:v1
+        restart: always
+        network_mode: host
+        env_file:
+          - telemetry-analysis/.env
+
+    telemetry-gateway:
+        build: telemetry-gateway/.
+        image: telemetry-gateway:v1
+        restart: always
+        network_mode: host
+        env_file:
+          - telemetry-gateway/.env

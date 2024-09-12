@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	TOPIC_DEVICES  = "devices/status"
+	TOPIC_DEVICES  = "devices"
 	PUSHER_CHANNEL = "devices"
 	PUSHER_EVENT   = "status"
 )
