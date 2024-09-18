@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/google/uuid"
 	"github.com/phuslu/log"
 )
 
@@ -16,7 +17,9 @@ func NewMessagingBroker(settings *HiveMQSettings) *MessagingBroker {
 	brokerTLS := fmt.Sprintf("tls://%s:%s", settings.Broker, settings.Port)
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(brokerTLS)
-	opts.SetClientID(settings.ClientId)
+	clientId := uuid.New()
+
+	opts.SetClientID(clientId.String())
 	opts.SetUsername(settings.Username)
 	opts.SetPassword(settings.Password)
 

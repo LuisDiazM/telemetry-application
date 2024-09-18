@@ -37,7 +37,7 @@ services:
     telemetry-gateway:
         build: telemetry-gateway/.
         image: telemetry-gateway:v1
-        restart: always
         network_mode: host
+        restart: always
         env_file:
           - telemetry-gateway/.env
