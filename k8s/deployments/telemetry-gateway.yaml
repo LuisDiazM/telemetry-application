@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  telemetry-gateway
+  namespace: staging
+  labels:
+    app:  telemetry-gateway
+spec:
+  selector:
+    matchLabels:
+      app: telemetry-gateway
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  telemetry-gateway
+    spec:
+      containers:
+      - name:  telemetry-gateway
+        image:  luisdiazm/telemetry-gateway:v2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: HIVE_MQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: telemetrygatewaysecret
+              key: HIVE_MQ_USER
+        - name: HIVE_MQ_PASS
+          valueFrom:
+            secretKeyRef:
+              name: telemetrygatewaysecret
+              key: HIVE_MQ_PASS
+        - name: HIVE_MQ_PORT
+          valueFrom:
+            secretKeyRef:
+              name: telemetrygatewaysecret
+              key: HIVE_MQ_PORT
+        - name: HIVE_MQ_URL
+          valueFrom:
+            secretKeyRef:
+              name: telemetrygatewaysecret
+              key: HIVE_MQ_URL
+        - name: MONGO_URL
+          valueFrom:
+            secretKeyRef:
+              name: telemetrygatewaysecret
+              key: MONGO_URL
+        - name: MONGO_MAXPOOLSIZE
+          valueFrom:
+            secretKeyRef:
+              name: telemetrygatewaysecret
+              key: MONGO_MAXPOOLSIZE
+        - name: REDIS_HOST
+          valueFrom:
+            secretKeyRef:
+              name: telemetrygatewaysecret
+              key: REDIS_HOST
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: telemetrygatewaysecret
+              key: REDIS_PASSWORD

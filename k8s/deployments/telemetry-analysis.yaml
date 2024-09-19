@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telemetry-analysis
+  namespace: staging
+  labels:
+    app: telemetry-analysis
+spec:
+  selector:
+    matchLabels:
+      app: telemetry-analysis
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: telemetry-analysis
+    spec:
+      # initContainers:
+      # Init containers are exactly like regular containers, except:
+      # - Init containers always run to completion.
+      # - Each init container must complete successfully before the next one starts.
+      containers:
+        - name: analysis
+          image: luisdiazm/telemetry-analysis:v1
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 250m
+              memory: 512Mi
+          env:
+            - name: PORT
+              valueFrom:
+                secretKeyRef:
+                  name: telemetryanalysissecret
+                  key: PORT
+            - name: WORKERS
+              valueFrom:
+                secretKeyRef:
+                  name: telemetryanalysissecret
+                  key: WORKERS
+            - name: MONGO_URL
+              valueFrom:
+                secretKeyRef:
+                  name: telemetryanalysissecret
+                  key: MONGO_URL
+            - name: MONGO_MAXPOOLSIZE
+              valueFrom:
+                secretKeyRef:
+                  name: telemetryanalysissecret
+                  key: MONGO_MAXPOOLSIZE
+          ports:
+            - containerPort: 50053
+              name: grpc
+      restartPolicy: Always
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: telemetry-analysis-service
+  namespace: staging
+spec:
+  selector:
+    app: telemetry-analysis
+  type: ClusterIP
+  ports:
+  - name: grpc
+    protocol: TCP
+    port: 50053
+    targetPort: 50053

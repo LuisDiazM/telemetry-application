@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  telemetry-bff
+  namespace: staging
+  labels:
+    app:  telemetry-bff
+spec:
+  selector:
+    matchLabels:
+      app: telemetry-bff
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  telemetry-bff
+    spec:
+      # initContainers:
+        # Init containers are exactly like regular containers, except:
+          # - Init containers always run to completion.
+          # - Each init container must complete successfully before the next one starts.
+      containers:
+      - name:  telemetry-bff
+        image:  luisdiazm/telemetry-bff:v1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: PORT
+          valueFrom:
+            secretKeyRef:
+              name: telemetrybffsecret
+              key: PORT
+        - name: AUTH0_DOMAIN
+          valueFrom:
+            secretKeyRef:
+              name: telemetrybffsecret
+              key: AUTH0_DOMAIN
+        - name: REDIS_HOST
+          valueFrom:
+            secretKeyRef:
+              name: telemetrybffsecret
+              key: REDIS_HOST
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: telemetrybffsecret
+              key: REDIS_PASSWORD
+        - name: USERS_MANAGER_HOST
+          valueFrom:
+            secretKeyRef:
+              name: telemetrybffsecret
+              key: USERS_MANAGER_HOST
+        - name: DEVICES_MANAGER_HOST
+          valueFrom:
+            secretKeyRef:
+              name: telemetrybffsecret
+              key: DEVICES_MANAGER_HOST
+        - name: TELEMETRY_ANALYSIS_HOST
+          valueFrom:
+            secretKeyRef:
+              name: telemetrybffsecret
+              key: TELEMETRY_ANALYSIS_HOST
+        ports:
+        - containerPort:  8080
+          name:  http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: telemetry-bff-service
+  namespace: staging
+spec:
+  selector:
+    app: telemetry-bff
+  type: ClusterIP
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 8080 

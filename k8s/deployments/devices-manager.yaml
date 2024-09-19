@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  devices-manager
+  namespace: staging
+  labels:
+    app:  devices-manager
+spec:
+  selector:
+    matchLabels:
+      app: devices-manager
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  devices-manager
+    spec:
+      containers:
+      - name:  devices-manager
+        image:  luisdiazm/devices-manager:v2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: HIVE_MQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: devicesmanagersecret
+              key: HIVE_MQ_USER
+        - name: HIVE_MQ_PASS
+          valueFrom:
+            secretKeyRef:
+              name: devicesmanagersecret
+              key: HIVE_MQ_PASS
+        - name: HIVE_MQ_PORT
+          valueFrom:
+            secretKeyRef:
+              name: devicesmanagersecret
+              key: HIVE_MQ_PORT     
+        - name: HIVE_MQ_URL
+          valueFrom:
+            secretKeyRef:
+              name: devicesmanagersecret
+              key: HIVE_MQ_URL 
+        - name: PORT
+          valueFrom:
+            secretKeyRef:
+              name: devicesmanagersecret
+              key: PORT    
+        - name: MONGO_URL
+          valueFrom:
+            secretKeyRef:
+              name: devicesmanagersecret
+              key: MONGO_URL      
+        - name: MONGO_MAXPOOLSIZE
+          valueFrom:
+            secretKeyRef:
+              name: devicesmanagersecret
+              key: MONGO_MAXPOOLSIZE      
+        - name: PUSHER_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: devicesmanagersecret
+              key: PUSHER_APP_ID
+        - name: PUSHER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: devicesmanagersecret
+              key: PUSHER_KEY
+        - name: PUSHER_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: devicesmanagersecret
+              key: PUSHER_SECRET
+        - name: PUSHER_CLUSTER
+          valueFrom:
+            secretKeyRef:
+              name: devicesmanagersecret
+              key: PUSHER_CLUSTER                        
+        ports:
+        - containerPort:  50052
+          name:  devices-manager
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: devices-manager-service
+  namespace: staging
+spec:
+  selector:
+    app: devices-manager
+  type: ClusterIP
+  ports:
+  - name: grpc
+    protocol: TCP
+    port: 50052
+    targetPort: 50052 
